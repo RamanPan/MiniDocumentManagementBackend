@@ -67,4 +67,5 @@ public class InfoDoc {
     public void setToDate(Date toDate) {
         this.toDate = toDate;
     }
+
 }

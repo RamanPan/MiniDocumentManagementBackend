@@ -18,6 +18,9 @@ public class VersionDoc {
 
     private String author;
 
+    private String fileName;
+    private String fileType;
+
     private byte[] fileData;
 
     public Long getId() {
@@ -46,6 +49,22 @@ public class VersionDoc {
 
     public byte[] getFileData() {
         return fileData;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public void setFileData(byte[] fileData) {

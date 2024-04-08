@@ -62,15 +62,4 @@ public class Doc {
     public void setVersionDocs(List<VersionDoc> versionDocs) {
         this.versionDocs = versionDocs;
     }
-
-    @Override
-    public String toString() {
-        return "Doc{" +
-                "id=" + id +
-                ", docName='" + docName + '\'' +
-                ", author='" + author + '\'' +
-                ", infoDoc=" + infoDoc +
-                ", versionDocs=" + versionDocs +
-                '}';
-    }
 }
