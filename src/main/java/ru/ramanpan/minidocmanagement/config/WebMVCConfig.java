@@ -3,6 +3,7 @@ package ru.ramanpan.minidocmanagement.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,6 +25,17 @@ public class WebMVCConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/resources/**")
                 .addResourceLocations("/resources/");
+    }
+
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET","POST","OPTIONS", "DELETE")
+                .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization", "Vary")
+                .allowCredentials(true).maxAge(3600);
+
     }
 
 }
