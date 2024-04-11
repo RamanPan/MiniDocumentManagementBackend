@@ -1,12 +1,12 @@
 package ru.ramanpan.minidocmanagement.controller;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.ramanpan.minidocmanagement.dto.CreateDocDTO;
-import ru.ramanpan.minidocmanagement.dto.DocDTO;
-import ru.ramanpan.minidocmanagement.dto.NewVersionDocDTO;
-import ru.ramanpan.minidocmanagement.dto.RemoveDocDTO;
+import ru.ramanpan.minidocmanagement.dto.*;
 import ru.ramanpan.minidocmanagement.entity.Doc;
 import ru.ramanpan.minidocmanagement.entity.VersionDoc;
 import ru.ramanpan.minidocmanagement.service.DocService;
@@ -39,18 +39,18 @@ public class DocController {
 
     @PostMapping("/remove")
     public ResponseEntity<String> removeDoc(@RequestBody RemoveDocDTO removeDocDTO) {
-        infoDocService.removeDoc(docService.findDoc(removeDocDTO.getId()),removeDocDTO);
+        infoDocService.removeDoc(docService.findDoc(removeDocDTO.getId()), removeDocDTO);
         return ResponseEntity.ok(removeDocDTO.getDocOutputNumber());
     }
 
     @PostMapping("/newversiondoc")
-    public ResponseEntity.BodyBuilder newVersionDoc(@ModelAttribute NewVersionDocDTO newVersionDocDTO) {
-        versionDocService.saveVersionDoc(newVersionDocDTO, docService.findDoc(newVersionDocDTO.getId()));
+    public ResponseEntity.BodyBuilder newVersionDoc(@ModelAttribute CreateVersionDocDTO createVersionDocDTO) {
+        versionDocService.saveVersionDoc(createVersionDocDTO, docService.findDoc(createVersionDocDTO.getId()));
         return ResponseEntity.ok();
     }
 
     @GetMapping("/versiondoc/{id}")
-    public ResponseEntity<List<VersionDoc>> getAllVersionDocByDocId(@PathVariable("id") Long docId) {
+    public ResponseEntity<List<VersionDocDTO>> getAllVersionDocByDocId(@PathVariable("id") Long docId) {
         return ResponseEntity.ok(versionDocService.getVersionDocsByDocId(docId));
     }
 
@@ -68,5 +68,18 @@ public class DocController {
     public ResponseEntity.BodyBuilder deleteDoc(@PathVariable("id") Long id) {
         docService.deleteDoc(id);
         return ResponseEntity.ok();
+    }
+
+    @GetMapping("/versiondocfile/{id}")
+    public ResponseEntity<byte[]> getFileByVersionDocId(@PathVariable("id") Long docId) {
+        VersionDoc versionDoc = versionDocService.findById(docId);
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.valueOf(versionDoc.getFileType()));
+        header.setContentLength(versionDoc.getFileData().length);
+        header.set("Content-Disposition", "attachment; filename=" +
+                versionDoc.getFileName());
+
+        return new ResponseEntity<>(versionDoc.getFileData(), header, HttpStatus.OK);
+
     }
 }
