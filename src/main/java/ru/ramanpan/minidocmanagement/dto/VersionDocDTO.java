@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class VersionDocDTO {
+    private Long id;
     private Long docId;
     private Integer number;
     private String author;

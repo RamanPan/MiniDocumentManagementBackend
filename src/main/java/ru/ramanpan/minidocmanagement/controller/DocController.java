@@ -32,9 +32,9 @@ public class DocController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity.BodyBuilder createDoc(@ModelAttribute CreateDocDTO createDocData) {
+    public ResponseEntity<String> createDoc(@ModelAttribute CreateDocDTO createDocData) {
         docService.createDoc(createDocData);
-        return ResponseEntity.ok();
+        return ResponseEntity.ok(HttpHeaders.ACCEPT);
     }
 
     @PostMapping("/remove")
@@ -44,9 +44,9 @@ public class DocController {
     }
 
     @PostMapping("/newversiondoc")
-    public ResponseEntity.BodyBuilder newVersionDoc(@ModelAttribute CreateVersionDocDTO createVersionDocDTO) {
+    public ResponseEntity<String> newVersionDoc(@ModelAttribute CreateVersionDocDTO createVersionDocDTO) {
         versionDocService.saveVersionDoc(createVersionDocDTO, docService.findDoc(createVersionDocDTO.getId()));
-        return ResponseEntity.ok();
+        return ResponseEntity.ok(HttpHeaders.ACCEPT);
     }
 
     @GetMapping("/versiondoc/{id}")
@@ -78,8 +78,6 @@ public class DocController {
         header.setContentLength(versionDoc.getFileData().length);
         header.set("Content-Disposition", "attachment; filename=" +
                 versionDoc.getFileName());
-
         return new ResponseEntity<>(versionDoc.getFileData(), header, HttpStatus.OK);
-
     }
 }

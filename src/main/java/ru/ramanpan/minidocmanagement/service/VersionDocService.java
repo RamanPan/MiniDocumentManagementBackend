@@ -22,7 +22,8 @@ public class VersionDocService {
     private VersionDocDTO mapToDTO(VersionDoc versionDoc) {
         VersionDocDTO versionDocDTO = new VersionDocDTO();
         versionDocDTO.setNumber(numberCount++);
-        versionDocDTO.setDocId(versionDoc.getId());
+        versionDocDTO.setId(versionDoc.getId());
+        versionDocDTO.setDocId(versionDoc.getDocId().getId());
         versionDocDTO.setAuthor(versionDoc.getAuthor());
         versionDocDTO.setFileData(versionDoc.getFileData());
         versionDocDTO.setFileName(versionDoc.getFileName());
@@ -38,7 +39,6 @@ public class VersionDocService {
     public void saveVersionDoc(CreateVersionDocDTO createVersionDocDTO, Doc doc) {
         VersionDoc versionDoc = new VersionDoc();
         MultipartFile multipartFile = createVersionDocDTO.getFileData();
-        System.out.println(multipartFile.getOriginalFilename());
         try {
             if (createVersionDocDTO.getFileData() != null) {
                 versionDoc.setFileName(multipartFile.getOriginalFilename());
@@ -66,6 +66,6 @@ public class VersionDocService {
     @Transactional
     public List<VersionDocDTO> getVersionDocsByDocId(Long docId) {
         numberCount = 1;
-        return versionDocDao.findAllByDocId(docId).stream().map(this::mapToDTO).collect(Collectors.toList());
+        return versionDocDao.findAllByDocId(docId).stream().map(this::mapToDTO).toList();
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.Serializable;
 
 @Data
-public class CreateDocDTO implements Serializable {
+public class CreateDocDTO {
     private String docName;
     private String author;
     private String inputNumber;
