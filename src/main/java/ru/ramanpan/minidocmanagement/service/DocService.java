@@ -11,6 +11,7 @@ import ru.ramanpan.minidocmanagement.entity.VersionDoc;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +22,16 @@ public class DocService {
     private final InfoDocService infoDocService;
     private final VersionDocService versionDocService;
 
+    private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
     private DocDTO mapToDTO(Doc doc) {
+
         DocDTO docDTO = new DocDTO();
         docDTO.setId(doc.getId());
         docDTO.setInfoDocId(doc.getInfoDoc().getId());
         docDTO.setDocName(doc.getDocName());
         docDTO.setDocInputNumber(doc.getInfoDoc().getDocIntoNumber());
-        docDTO.setDateInit(doc.getInfoDoc().getFromDate().toString());
+        docDTO.setDateInit(format.format(doc.getInfoDoc().getFromDate()));
+        docDTO.setDateDeRegistration(doc.getInfoDoc().getToDate() == null ? "" : format.format(doc.getInfoDoc().getToDate()));
         docDTO.setDocOutputNumber(doc.getInfoDoc().getDocExternNumber());
         docDTO.setAuthor(doc.getAuthor());
         return docDTO;
@@ -40,7 +44,7 @@ public class DocService {
     }
 
     @Transactional
-    public void createDoc(CreateDocDTO createDocData) {
+    public Long createDoc(CreateDocDTO createDocData) {
         Doc doc = new Doc();
         InfoDoc infoDoc = new InfoDoc();
         VersionDoc versionDoc = new VersionDoc();
@@ -56,7 +60,6 @@ public class DocService {
         }
         doc.setDocName(createDocData.getDocName());
         doc.setAuthor(createDocData.getAuthor());
-        System.out.println(doc);
         doc.setId(saveDoc(doc));
         infoDoc.setDocId(doc);
         infoDoc.setDocIntoNumber(createDocData.getInputNumber());
@@ -67,11 +70,12 @@ public class DocService {
         versionDoc.setAuthor(createDocData.getAuthor());
         versionDoc.setDocId(doc);
         versionDocService.saveVersionDoc(versionDoc);
+        return doc.getId();
     }
 
     @Transactional
     public List<DocDTO> findAllDocs() {
-        return docDao.getAllDocs().stream().map(this::mapToDTO).collect(Collectors.toList());
+        return docDao.getAllDocs().stream().map(this::mapToDTO).toList();
     }
 
     @Transactional

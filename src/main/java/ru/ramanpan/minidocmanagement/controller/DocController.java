@@ -32,9 +32,10 @@ public class DocController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createDoc(@ModelAttribute CreateDocDTO createDocData) {
-        docService.createDoc(createDocData);
-        return ResponseEntity.ok(HttpHeaders.ACCEPT);
+    public ResponseEntity<DocDTO> createDoc(@ModelAttribute CreateDocDTO createDocData) {
+        DocDTO docDTO = new DocDTO();
+        docDTO.setId(docService.createDoc(createDocData));
+        return ResponseEntity.ok(docDTO);
     }
 
     @PostMapping("/remove")

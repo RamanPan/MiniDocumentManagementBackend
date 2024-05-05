@@ -10,6 +10,7 @@ import ru.ramanpan.minidocmanagement.entity.VersionDoc;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,6 @@ public class VersionDocService {
     @Transactional
     public List<VersionDocDTO> getVersionDocsByDocId(Long docId) {
         numberCount = 1;
-        return versionDocDao.findAllByDocId(docId).stream().map(this::mapToDTO).toList();
+        return versionDocDao.findAllByDocId(docId).stream().sorted(Comparator.comparing(VersionDoc::getId)).map(this::mapToDTO).toList();
     }
 }

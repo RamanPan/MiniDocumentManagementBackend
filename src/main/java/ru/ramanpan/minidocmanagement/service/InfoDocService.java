@@ -7,6 +7,7 @@ import ru.ramanpan.minidocmanagement.entity.Doc;
 import ru.ramanpan.minidocmanagement.entity.InfoDoc;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 
 
 @Service
@@ -21,6 +22,7 @@ public class InfoDocService {
     public void removeDoc(Doc doc, RemoveDocDTO removeDocDTO) {
         InfoDoc infoDoc = doc.getInfoDoc();
         infoDoc.setDocExternNumber(removeDocDTO.getDocOutputNumber());
+        infoDoc.setToDate(new Date());
         infoDocDao.update(infoDoc);
     }
 

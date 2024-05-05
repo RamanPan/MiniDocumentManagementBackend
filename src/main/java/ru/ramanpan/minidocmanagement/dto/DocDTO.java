@@ -17,4 +17,6 @@ public class DocDTO {
     private String docOutputNumber;
 
     private String dateInit;
+
+    private String dateDeRegistration;
 }
