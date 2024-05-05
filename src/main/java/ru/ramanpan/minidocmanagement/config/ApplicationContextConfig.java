@@ -23,6 +23,9 @@ public class ApplicationContextConfig {
     @Autowired
     private Environment environment;
 
+    /**
+     * Настройка SessionFactory в контейнере Spring
+     * */
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -32,6 +35,9 @@ public class ApplicationContextConfig {
         return sessionFactory;
     }
 
+    /**
+     * Настройка параметров для работы с файлами
+     * */
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver getCommonsMultipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
@@ -40,6 +46,9 @@ public class ApplicationContextConfig {
         return multipartResolver;
     }
 
+    /**
+     * Настройка параметров для подключение к БД
+     * */
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -50,6 +59,9 @@ public class ApplicationContextConfig {
         return dataSource;
     }
 
+    /**
+     * Подключение пропертей для Hibernate
+     * */
     private Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
@@ -58,56 +70,14 @@ public class ApplicationContextConfig {
         properties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
         return properties;
     }
-
+    /**
+     * Создание менеджера транзакци в контексте Spring
+     * */
     @Bean
     public HibernateTransactionManager getTransactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
         return transactionManager;
     }
-    //    @Bean(name = "dataSource")
-//    public DataSource getDataSource() {
-//    	BasicDataSource dataSource = new BasicDataSource();
-//    	dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//    	dataSource.setUrl("jdbc:postgresql://localhost:5432/learnpractic");
-//    	dataSource.setUsername("postgres");
-//    	dataSource.setPassword("postgres");
-//
-//    	return dataSource;
-//    }
-//
-//
-//    private Properties getHibernateProperties() {
-//    	Properties properties = new Properties();
-//    	properties.put("hibernate.show_sql", "true");
-//    	properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-//    	return properties;
-//    }
-//
-//    @Autowired
-//    @Bean(name = "sessionFactory")
-//    public SessionFactory getSessionFactory(DataSource dataSource) {
-//    	LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(dataSource);
-//    	sessionBuilder.addProperties(getHibernateProperties());
-//    	sessionBuilder.addAnnotatedClasses(UploadFile.class);
-//    	return sessionBuilder.buildSessionFactory();
-//    }
-//
-//	@Autowired
-//	@Bean(name = "transactionManager")
-//	public HibernateTransactionManager getTransactionManager(
-//			SessionFactory sessionFactory) {
-//		HibernateTransactionManager transactionManager = new HibernateTransactionManager(
-//				sessionFactory);
-//
-//		return transactionManager;
-//	}
-//
-//    @Autowired
-//    @Bean(name = "fileUploadDao")
-//    public FileUploadDAO getUserDao(SessionFactory sessionFactory) {
-//    	return new FileUploadDAOImpl(sessionFactory);
-//    }
-//
 
 }
